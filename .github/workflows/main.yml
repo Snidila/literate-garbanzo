@@ -1,5 +1,0 @@
-      - name: Extract zip
-        uses: ihiroky/extract-action@v1
-        with:
-          file_path: SAMP-Mobile-Launcher-RN-main.zip
-          extract_dir: .
