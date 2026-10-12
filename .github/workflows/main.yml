@@ -1,10 +1,9 @@
-name: Unzip Repo File
+name: Unzip Automatic
 on:
   workflow_dispatch:
 
 permissions:
   contents: write
-  workflows: write
 
 jobs:
   unzip-job:
@@ -15,18 +14,12 @@ jobs:
 
       - name: Unzip File
         run: |
-          # البحث عن ملفات الـ zip وفك ضغطها في الجذر
-          for file in *.zip; do
-            if [ -f "$file" ]; then
-              echo "Extracting: $file"
-              unzip -o "$file"
-            fi
-          done
+          unzip -o "*.zip"
 
       - name: Commit and Push
         run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A
-          git commit -m "Automated Unzip via GitHub Actions" || exit 0
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Automated Unzip" || exit 0
           git push
