@@ -8,14 +8,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 16
-          cache: yarn
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 17
-      - run: yarn install
-      - run: cd android && chmod +x gradlew && ./gradlew assembleRelease
+      - name: Find project folder
+        run: |
+          ROOT=$(find . -maxdepth 2 -name package.json -not -path '*/node_modules/*' | awk '{print length, $0}' | sort -n | head -1 | cut -d' ' -f2- | xargs dirname)
+          echo "ROOT=$ROOT" >> $GITHUB_ENV
+          echo "Project folder: $ROOT"
+      - name: Install packages
+        working-directory: ${{ env.ROOT }}
+        run: yarn install
+      - name: Build APK
+        working-directory: ${{ env.ROOT }}/android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleRelease --stacktrace
       - uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: android/app/build/outputs/apk/release/*.apk
+          path: ${{ env.ROOT }}/android/app/build/outputs/apk/release/*.apk
