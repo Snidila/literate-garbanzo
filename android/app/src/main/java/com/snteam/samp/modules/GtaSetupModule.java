@@ -23,13 +23,22 @@ public class GtaSetupModule extends ReactContextBaseJavaModule {
     public void startGame(Promise promise) {
         try {
             Activity activity = getCurrentActivity();
+            if (activity == null) {
+                promise.reject("Error", "No current activity");
+                return;
+            }
 
             Intent intent = new Intent(context, MainGTA.class);
-            assert activity != null;
             intent.putExtras(activity.getIntent());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);
-            activity.finish();
+
+            // Resolve before finishing so the JS promise settles cleanly.
+            promise.resolve(null);
+
+            // Move launcher to background instead of destroying it so the
+            // React Native instance stays alive for the return trip.
+            activity.moveTaskToBack(true);
 
         } catch (Exception e) {
             promise.reject("Error", e);
