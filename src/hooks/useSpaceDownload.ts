@@ -4,7 +4,7 @@ import { selectBytes, selectFreeSpace } from '../selectors/loaderSelectors';
 import { useAppDispatch } from './useAppDispatch';
 import { useAppSelector } from './useAppSelector';
 
-export const useSpaceDownlload = (): {
+export const useSpaceDownload = (): {
   fetchSpace: () => boolean;
 } => {
   const dispatch = useAppDispatch();
