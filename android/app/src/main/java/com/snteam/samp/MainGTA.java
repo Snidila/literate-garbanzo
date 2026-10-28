@@ -44,7 +44,7 @@ public class MainGTA extends WarMedia {
     }
 
     public void onCreate(Bundle bundle) {
-        if(!once) {
+        if (!once) {
             once = true;
         }
 
@@ -59,6 +59,16 @@ public class MainGTA extends WarMedia {
     public void onDestroy() {
         System.out.println("MainGTA onDestroy");
         super.onDestroy();
+        self = null;
+
+        // Bring the launcher back instead of leaving a black screen.
+        try {
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            getApplicationContext().startActivity(intent);
+        } catch (Exception e) {
+            System.out.println("MainGTA: failed to return to launcher: " + e.getMessage());
+        }
     }
 
     public boolean onKeyDown(int i, KeyEvent keyEvent) {
