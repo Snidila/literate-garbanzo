@@ -30,6 +30,8 @@ export const FileDownload = {
       toFile: `${toPatch}/${toFile}/${toName}`,
       progress: progress,
       progressInterval: 800,
+      connectionTimeout: 30000,
+      readTimeout: 30000,
     });
     currentJobId = job.jobId;
 
